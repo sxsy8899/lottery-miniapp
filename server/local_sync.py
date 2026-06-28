@@ -64,10 +64,10 @@ def fetch_huiniao(code):
         total_pages = result.get('data', {}).get('totalPage', 1)
         items = result.get('data', {}).get('list', [])
 
-        # 翻页获取所有历史数据
+        # 翻页获取所有历史数据（每页间隔2秒防限流）
         if total_pages > 1:
             for page in range(2, total_pages + 1):
-                time.sleep(1)
+                time.sleep(2)
                 try:
                     r2 = new_session().get(f'{API_BASE}?type={huiniao_type}&page={page}&limit=200', timeout=15)
                     d2 = r2.json()
@@ -176,7 +176,7 @@ def main():
     print('--- 拉取数据 ---')
     for code in HUINIAO_TYPES:
         all_data[code] = fetch_huiniao(code)
-        time.sleep(2)  # 防限流
+        time.sleep(5)  # 防限流
 
     # 保存本地（GitHub Actions 用）
     data_file = os.path.join(os.path.dirname(__file__), 'data', 'lottery-data.json')
