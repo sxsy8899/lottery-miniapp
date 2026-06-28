@@ -57,12 +57,12 @@ Page({
   async go(code) {
     this.setData({ viewMode:'chart', loading: true, loadError: false, title: NAMES[code]+'走势图' })
     try {
-      const { data: draws } = await api.fetchHistory(code, 100)
+      const { data: draws } = await api.fetchHistory(code, 200)
       if (!draws || !draws.length) {
         this.setData({ loading: false, loadError: true })
         return
       }
-      this.setData({ title: NAMES[code]+'走势图（近'+Math.min(draws.length,50)+'期）' })
+      this.setData({ title: NAMES[code]+'走势图（近'+Math.min(draws.length,200)+'期）' })
       if (code === 'kl8') this.buildKL8(draws)
       else if (['fc3d','pl3','pl5','qxc'].includes(code)) this.buildDigit(code, draws)
       else this.buildBall(code, draws)
@@ -87,7 +87,7 @@ Page({
       qlc:{zones:[{l:'基本号',r:[1,30]}],eL:'特别号',eR:[1,30],mK:'numbers',eK:'special'},
       dlt:{zones:[{l:'前区',r:[1,35]}],eL:'后区',eR:[1,12],mK:'front',eK:'back'},
     }[code]
-    const N = Math.min(draws.length, 50)
+    const N = Math.min(draws.length, 200)
 
     const cols = []
     cols.push({w:90, text:'期号', cls:'h'})
@@ -164,7 +164,7 @@ Page({
   // ====== 数字走势（FC3D/PL3/PL5/QXC）======
   buildDigit(code, draws) {
     const DC = {fc3d:3,pl3:3,pl5:5,qxc:7}[code]
-    const N = Math.min(draws.length, 50)
+    const N = Math.min(draws.length, 200)
     const allLabels = {fc3d:['百位','十位','个位'],pl3:['百位','十位','个位'],pl5:['万位','千位','百位','十位','个位'],qxc:['第1位','第2位','第3位','第4位','第5位','第6位','第7位']}
     this.setData({digitLabels: []})
 
@@ -201,7 +201,7 @@ Page({
 
   // ====== 快乐8 ======
   buildKL8(draws) {
-    const N = Math.min(draws.length, 50)
+    const N = Math.min(draws.length, 200)
     const cols = [{w:80, text:'期号', cls:'h'}]
     for (let n=1; n<=80; n++) cols.push({w:34, text:pad(n), cls:'k'})
 

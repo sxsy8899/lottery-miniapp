@@ -43,14 +43,14 @@ def new_session():
     s.headers.update({'User-Agent': UA, 'Accept': 'application/json'})
     return s
 
-def fetch_huiniao(code, count=200):
-    """从 huiniao.top 获取彩票数据"""
+def fetch_huiniao(code):
+    """从 huiniao.top 获取彩票数据（全部历史）"""
     huiniao_type = HUINIAO_TYPES.get(code)
     if not huiniao_type:
         return []
 
     s = new_session()
-    url = f'{API_BASE}?type={huiniao_type}&page=1&limit={count}'
+    url = f'{API_BASE}?type={huiniao_type}&page=1&limit=200'
 
     try:
         resp = s.get(url, timeout=15)
@@ -61,9 +61,22 @@ def fetch_huiniao(code, count=200):
             return []
 
         result = data.get('data', {})
-        last = result.get('last', {})
+        total_pages = result.get('data', {}).get('totalPage', 1)
         items = result.get('data', {}).get('list', [])
 
+        # 翻页获取所有历史数据
+        if total_pages > 1:
+            for page in range(2, total_pages + 1):
+                time.sleep(1)
+                try:
+                    r2 = new_session().get(f'{API_BASE}?type={huiniao_type}&page={page}&limit=200', timeout=15)
+                    d2 = r2.json()
+                    items.extend(d2.get('data', {}).get('data', {}).get('list', []))
+                except:
+                    pass
+                print(f'  [{code}] 翻页 {page}/{total_pages}...')
+
+        last = result.get('last', {})
         if not items and last:
             items = [last]
 
@@ -162,7 +175,7 @@ def main():
 
     print('--- 拉取数据 ---')
     for code in HUINIAO_TYPES:
-        all_data[code] = fetch_huiniao(code, 200)
+        all_data[code] = fetch_huiniao(code)
         time.sleep(2)  # 防限流
 
     # 保存本地（GitHub Actions 用）

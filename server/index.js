@@ -407,7 +407,7 @@ app.get('/api/lottery/:code/latest', (req, res) => {
 
 app.get('/api/lottery/:code/history', (req, res) => {
   const code = req.params.code
-  const count = Math.min(parseInt(req.query.count) || 50, 500)
+  const count = Math.min(parseInt(req.query.count) || 50, 2000)
   const cacheKey = `history_${code}_${count}`
   const cached = getCache(cacheKey)
   if (cached) return res.json({ success: true, source: 'cache', data: cached, total: cached.length })
