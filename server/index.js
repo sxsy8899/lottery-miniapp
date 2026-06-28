@@ -567,8 +567,8 @@ app.listen(PORT, () => {
   console.log(`  遗漏查询: GET /api/lottery/:code/missing?page=1&pageSize=25&pos=0`)
   console.log(`  数据同步: POST /api/lottery/sync`)
   console.log(`  健康检查: GET /health`)
-  // 延迟 3 秒后自动同步
-  setTimeout(autoSyncOnStart, 3000)
+  // 延迟 3 秒后自动同步（已禁用——数据由 local_sync.py 推送）
+  // setTimeout(autoSyncOnStart, 3000)
 })
 
 module.exports = { app, syncData, loadData, saveData, LOTTERY_DATA }
