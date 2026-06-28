@@ -1,0 +1,97 @@
+<!--pages/missing/missing.wxml-->
+<view class="missing-container">
+  <view class="page-title">📊 遗漏查询</view>
+  <text class="page-subtitle">{{pageTitle}}</text>
+  <text class="page-range" wx:if="{{dataRange}}">{{dataRange}}</text>
+
+  <!-- 位置选择条（FC3D/PL3/PL5/QXC显示） -->
+  <view class="pos-bar" wx:if="{{showPosBar}}">
+    <view wx:for="{{posLabels}}" wx:key="index" class="pos-item {{currentPos == index ? 'active' : ''}}" bindtap="switchPos" data-pos="{{index}}">{{item}}</view>
+  </view>
+
+  <!-- 主体区域：左侧栏 + 右侧内容 -->
+  <view class="main-area">
+    <!-- 左侧彩票选择栏 -->
+    <scroll-view class="side-bar" scroll-y="true">
+      <view
+        wx:for="{{lotteryTypes}}"
+        wx:key="code"
+        class="side-item {{currentLottery === item.code ? 'active' : ''}}"
+        bindtap="switchLottery"
+        data-code="{{item.code}}"
+      >{{item.name}}</view>
+    </scroll-view>
+
+    <!-- 右侧数据区 -->
+    <view class="content-area">
+      <!-- 加载中 -->
+      <view wx:if="{{loading}}" class="loading-wrap" style="padding-top:100rpx;">
+        <view class="loading-spinner"></view>
+        <text class="loading-text">正在计算遗漏数据...</text>
+      </view>
+
+      <!-- 加载失败 -->
+      <view wx:elif="{{loadError}}" class="error-wrap" style="padding-top:100rpx;">
+        <text class="error-icon">📡</text>
+        <text class="error-text">数据加载失败</text>
+        <view class="retry-btn" bindtap="retry">重新加载</view>
+      </view>
+
+      <!-- 正常内容 -->
+      <block wx:else>
+        <!-- 信息提示 -->
+        <view class="info-bar">
+          <text class="info-text">共查询 {{totalCount}} 个号码 · 页码 {{currentPage}}/{{totalPages}}</text>
+        </view>
+
+        <!-- 数据表格 -->
+        <scroll-view class="table-scroll" scroll-x="true" scroll-y="true">
+          <view class="table-wrapper">
+            <view class="table-header">
+              <view class="th" style="width:80rpx;">序号</view>
+              <view class="th" style="width:120rpx;">号码</view>
+              <view class="th" style="width:110rpx;">出现次数</view>
+              <view class="th" style="width:130rpx;">当前遗漏</view>
+              <view class="th" style="width:130rpx;">最大遗漏</view>
+            </view>
+            <view
+              wx:for="{{dataList}}"
+              wx:key="index"
+              class="table-row"
+            >
+              <view class="td" style="width:80rpx;color:#1565C0;font-weight:bold;">{{item.index}}</view>
+              <view class="td number-cell" style="width:120rpx;">
+                <block wx:for="{{item.digits}}" wx:for-item="d" wx:key="*this">
+                  <text class="digit">{{d}}</text>
+                </block>
+              </view>
+              <view class="td" style="width:110rpx;">
+                <text class="{{item.count > 0 ? 'count-high' : 'count-low'}}">{{item.count}}次</text>
+              </view>
+              <view class="td" style="width:130rpx;">
+                <text class="miss-current {{item.currentMissing > 10 ? 'miss-hot' : ''}}">
+                  {{item.currentMissing}}期
+                </text>
+              </view>
+              <view class="td" style="width:130rpx;">
+                <text class="miss-max">{{item.maxMissing}}期</text>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+
+        <!-- 分页 -->
+        <view class="pagination">
+          <view class="page-btn {{currentPage <= 1 ? 'disabled' : ''}}" bindtap="goPage" data-page="1">首页</view>
+          <view class="page-btn {{currentPage <= 1 ? 'disabled' : ''}}" bindtap="goPage" data-page="{{currentPage - 1}}">上一页</view>
+          <view class="page-btn {{currentPage >= totalPages ? 'disabled' : ''}}" bindtap="goPage" data-page="{{currentPage + 1}}">下一页</view>
+          <view class="page-btn {{currentPage >= totalPages ? 'disabled' : ''}}" bindtap="goPage" data-page="{{totalPages}}">尾页</view>
+          <view class="page-info">{{currentPage}}/{{totalPages}}</view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 底部占位 -->
+  <view style="height:120rpx;"></view>
+</view>

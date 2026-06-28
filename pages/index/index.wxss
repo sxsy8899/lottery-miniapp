@@ -1,0 +1,14 @@
+/* pages/index/index.wxss */
+.container {
+  background-color: #f0f0f0;
+  padding-bottom: 20rpx;
+}
+
+.lottery-logo {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+  overflow: hidden;
+}

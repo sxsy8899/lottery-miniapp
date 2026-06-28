@@ -1,0 +1,56 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/trend/trend",
+    "pages/missing/missing",
+    "pages/calculator/calculator",
+    "pages/bettable/bettable"
+  ],
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#4A90D9",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tab-home.png",
+        "selectedIconPath": "images/tab-home-active.png"
+      },
+      {
+        "pagePath": "pages/trend/trend",
+        "text": "走势图",
+        "iconPath": "images/tab-trend.png",
+        "selectedIconPath": "images/tab-trend-active.png"
+      },
+      {
+        "pagePath": "pages/missing/missing",
+        "text": "遗漏查询",
+        "iconPath": "images/tab-missing.png",
+        "selectedIconPath": "images/tab-missing-active.png"
+      },
+      {
+        "pagePath": "pages/calculator/calculator",
+        "text": "兑奖",
+        "iconPath": "images/tab-calc.png",
+        "selectedIconPath": "images/tab-calc-active.png"
+      },
+      {
+        "pagePath": "pages/bettable/bettable",
+        "text": "投注金额表",
+        "iconPath": "images/tab-bet.png",
+        "selectedIconPath": "images/tab-bet-active.png"
+      }
+    ]
+  },
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#87CEEB",
+    "navigationBarTitleText": "彩票开奖信息",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#87CEEB"
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

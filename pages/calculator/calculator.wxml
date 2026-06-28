@@ -1,0 +1,137 @@
+<!--pages/calculator/calculator.wxml-->
+<view class="calc-container">
+  <view class="page-title">🎰 进行兑奖</view>
+  <view class="main-area">
+    <!-- 左侧彩票选择 -->
+    <scroll-view class="side-bar" scroll-y="true">
+      <view wx:for="{{lotteryTypes}}" wx:key="code" class="side-item {{currentLottery === item.code ? 'active' : ''}}" bindtap="onSwitchLottery" data-code="{{item.code}}">{{item.name}}</view>
+    </scroll-view>
+
+    <!-- 右侧 -->
+    <view class="check-content">
+      <!-- 参考号码 -->
+      <view class="ref-draw" wx:if="{{drawData}}">
+        <text class="ref-draw-label">当期 {{drawData.period}} 开奖参考：</text>
+        <view class="ref-draw-nums">
+          <block wx:if="{{currentLottery === 'ssq'}}">
+            <view class="rball r" wx:for="{{drawData.reds}}" wx:key="*this">{{item}}</view>
+            <text class="ref-sep">+</text>
+            <view class="rball b">{{drawData.blue}}</view>
+          </block>
+          <block wx:elif="{{currentLottery === 'dlt'}}">
+            <view class="rball r" wx:for="{{drawData.front}}" wx:key="*this">{{item}}</view>
+            <text class="ref-sep">+</text>
+            <view class="rball y" wx:for="{{drawData.back}}" wx:key="*this">{{item}}</view>
+          </block>
+          <block wx:elif="{{currentLottery === 'qlc'}}">
+            <view class="rball r" wx:for="{{drawData.numbers}}" wx:key="*this">{{item}}</view>
+            <text class="ref-sep">+</text>
+            <view class="rball y">{{drawData.special}}</view>
+          </block>
+          <block wx:elif="{{currentLottery === 'kl8'}}">
+            <view class="ref-ball2" wx:for="{{drawData.numbers}}" wx:key="*this" wx:for-item="n">{{n}}</view>
+          </block>
+          <block wx:else>
+            <view class="rball y" wx:for="{{drawData.numbers}}" wx:key="*this">{{item}}</view>
+          </block>
+        </view>
+      </view>
+
+      <!-- KL8选号数量 -->
+      <view class="kl8-sel" wx:if="{{currentLottery === 'kl8'}}">
+        <text>玩法：选</text>
+        <picker mode="selector" range="{{[1,2,3,4,5,6,7,8,9,10]}}" value="{{kl8Count-1}}" bindchange="onKl8CountChange">
+          <view class="kl8-pk">{{kl8Count}}</view>
+        </picker>
+        <text>个号码</text>
+      </view>
+
+      <!-- 球号选择区 -->
+      <block wx:if="{{zones.length > 0}}">
+        <view class="zone-block" wx:for="{{zones}}" wx:key="index" wx:for-item="zone" wx:for-index="zi">
+          <text class="zone-title">{{zone.label}}（已选 {{zone.selected.length}}/{{zone.max}}）</text>
+          <view class="ball-grid" wx:if="{{zone.cls === 'p'}}">
+            <view wx:for="{{zone.nums}}" wx:key="*this" wx:for-item="n"
+              class="gball p {{zone.selObj[n] ? 'sel' : ''}}"
+              bindtap="onBallTap" data-zi="{{zi}}" data-n="{{n}}">{{n}}</view>
+          </view>
+          <view class="ball-grid" wx:else>
+            <view wx:for="{{zone.nums}}" wx:key="*this" wx:for-item="n"
+              class="gball {{zone.cls}} {{zone.selObj[n] ? 'sel' : ''}}"
+              bindtap="onBallTap" data-zi="{{zi}}" data-n="{{n}}">{{n}}</view>
+          </view>
+        </view>
+
+        <!-- 已选 -->
+        <view class="selected-bar">
+          <text class="sel-label">已选号码：</text>
+          <block wx:for="{{zones}}" wx:key="index" wx:for-item="zone">
+            <view wx:for="{{zone.selected}}" wx:key="*this" wx:for-item="n" class="sel-ball {{zone.cls}}">{{n}}</view>
+            <text wx:if="{{zone.selected.length > 0 && index < zones.length - 1}}" class="sel-sep"> | </text>
+          </block>
+          <text wx:if="{{selectedCount === 0}}" class="sel-empty">点击下方号码进行选择</text>
+        </view>
+      </block>
+
+      <!-- 数字选择区 -->
+      <block wx:if="{{digits.length > 0}}">
+        <view class="digit-block" wx:for="{{digits}}" wx:key="index" wx:for-item="d" wx:for-index="di">
+          <text class="digit-label">{{d.label}}</text>
+          <view class="digit-row">
+            <view wx:for="{{[0,1,2,3,4,5,6,7,8,9]}}" wx:key="*this" wx:for-item="v"
+              class="dcell {{d.val == v ? 'dsel' : ''}}"
+              bindtap="onDigitTap" data-di="{{di}}" data-v="{{v}}">{{v}}</view>
+          </view>
+        </view>
+      </block>
+
+      <!-- 按钮 -->
+      <view class="btn-row">
+        <button class="check-btn" bindtap="doCheck">开始兑奖</button>
+        <button class="check-btn reset-btn" bindtap="clearAll">清空</button>
+      </view>
+      <view class="btn-row-s">
+        <button class="random-btn" bindtap="quickRandom">🎲 机选一注</button>
+      </view>
+
+      <!-- 结果 -->
+      <view class="result-section" wx:if="{{checkResult}}">
+        <view class="result-card {{checkResult.isWin ? 'win' : 'no-win'}}">
+          <text class="result-icon">{{checkResult.isWin ? '🎉' : '😅'}}</text>
+          <text class="result-title">{{checkResult.isWin ? '恭喜中奖！' : '很遗憾，未中奖'}}</text>
+          <text class="result-prize">{{checkResult.prize}}</text>
+        </view>
+        <view class="detail-card">
+          <text class="detail-title">比对详情</text>
+          <block wx:if="{{currentLottery === 'ssq'}}">
+            <view class="detail-row"><text class="detail-label">红球命中</text><text class="detail-value h">{{checkResult.matched.reds}}/6</text></view>
+            <view class="detail-row"><text class="detail-label">蓝球命中</text><text class="detail-value h">{{checkResult.matched.blue ? '✓' : '✗'}}</text></view>
+          </block>
+          <block wx:elif="{{currentLottery === 'fc3d' || currentLottery === 'pl3'}}">
+            <view class="detail-row"><text class="detail-label">直选</text><text class="detail-value h">{{checkResult.matched.exact ? '✓ 全中' : '✗'}}</text></view>
+            <view class="detail-row"><text class="detail-label">组选</text><text class="detail-value h">{{checkResult.matched.group ? '✓' : '✗'}}</text></view>
+          </block>
+          <block wx:elif="{{currentLottery === 'kl8'}}">
+            <view class="detail-row"><text class="detail-label">命中</text><text class="detail-value h">{{checkResult.matched.total}}/{{checkResult.matched.selectCount}}</text></view>
+          </block>
+          <block wx:elif="{{currentLottery === 'qlc'}}">
+            <view class="detail-row"><text class="detail-label">基本号命中</text><text class="detail-value h">{{checkResult.matched.main}}/7</text></view>
+            <view class="detail-row"><text class="detail-label">特别号命中</text><text class="detail-value h">{{checkResult.matched.special ? '✓' : '✗'}}</text></view>
+          </block>
+          <block wx:elif="{{currentLottery === 'dlt'}}">
+            <view class="detail-row"><text class="detail-label">前区命中</text><text class="detail-value h">{{checkResult.matched.front}}/5</text></view>
+            <view class="detail-row"><text class="detail-label">后区命中</text><text class="detail-value h">{{checkResult.matched.back}}/2</text></view>
+          </block>
+          <block wx:elif="{{currentLottery === 'pl5'}}">
+            <view class="detail-row"><text class="detail-label">号码比对</text><text class="detail-value h">{{checkResult.matched.exact ? '✓ 全中' : '✗'}}</text></view>
+          </block>
+          <block wx:elif="{{currentLottery === 'qxc'}}">
+            <view class="detail-row"><text class="detail-label">连续命中</text><text class="detail-value h">前{{checkResult.matched.start}}位</text></view>
+            <view class="detail-row"><text class="detail-label">最后一位</text><text class="detail-value h">{{checkResult.matched.last ? '✓' : '✗'}}</text></view>
+          </block>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view style="height:120rpx;"></view>
+</view>

@@ -1,0 +1,15 @@
+{
+  "name": "lottery-data-server",
+  "version": "3.0.0",
+  "description": "彩票开奖数据服务 - 数据存储 + API + 自动同步",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "sync": "node sync.js",
+    "dev": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}

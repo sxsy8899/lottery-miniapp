@@ -1,0 +1,382 @@
+/* 全局样式 */
+page {
+  background-color: #f5f5f5;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 28rpx;
+  color: #333;
+}
+
+/* 通用容器 */
+.container {
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* 福彩头部 */
+.welfare-header {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  background: linear-gradient(135deg, #E53935, #D32F2F);
+  color: white;
+}
+
+.welfare-header .logo-text {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-right: 20rpx;
+}
+
+.welfare-header .slogan {
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+.welfare-header .slogan text {
+  margin: 0 8rpx;
+}
+
+/* 体彩头部 */
+.sports-header {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+  color: white;
+}
+
+.sports-header .logo-text {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-right: 20rpx;
+}
+
+.sports-header .slogan {
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+.sports-header .slogan text {
+  margin: 0 8rpx;
+}
+
+/* 板块标题 */
+.section-title {
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: bold;
+  padding: 12rpx 0;
+  color: #333;
+  background-color: #fff;
+}
+
+/* 彩票卡片 */
+.lottery-card {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 24rpx;
+  margin: 8rpx 16rpx;
+  border-radius: 16rpx;
+  background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+}
+
+.lottery-card.sports-card {
+  background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+}
+
+.lottery-logo {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.lottery-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.lottery-name-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6rpx;
+}
+
+.lottery-name-badge {
+  background: linear-gradient(135deg, #FF6B6B, #EE5A52);
+  color: white;
+  padding: 4rpx 14rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  font-weight: bold;
+  margin-right: 10rpx;
+}
+
+.lottery-name-badge.orange {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+}
+
+.lottery-schedule {
+  font-size: 22rpx;
+  color: #555;
+}
+
+.lottery-period {
+  font-size: 22rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
+.lottery-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5rpx;
+}
+
+.ball {
+  width: 66rpx;
+  height: 66rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: white;
+}
+
+.ball-red {
+  background: linear-gradient(135deg, #EF5350, #C62828);
+}
+
+.ball-blue {
+  background: linear-gradient(135deg, #42A5F5, #1565C0);
+}
+
+.ball-yellow {
+  background: linear-gradient(135deg, #FFCA28, #F9A825);
+  color: #333;
+}
+
+.ball-purple {
+  background: linear-gradient(135deg, #AB47BC, #7B1FA2);
+}
+
+/* QLC小球（8个球需要小一号） */
+.qlc-ball {
+  width: 52rpx !important;
+  height: 52rpx !important;
+  font-size: 24rpx !important;
+}
+
+.pool-link {
+  font-size: 24rpx;
+  color: #1565C0;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* NEW 标记 */
+.new-badge {
+  background: #E53935;
+  color: white;
+  font-size: 20rpx;
+  font-weight: bold;
+  padding: 2rpx 10rpx;
+  border-radius: 8rpx;
+  margin-left: 8rpx;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* KL8小球 */
+.kl8-ball {
+  background: #E91E63 !important;
+  width: 62rpx !important;
+  height: 62rpx !important;
+  font-size: 22rpx !important;
+  border-radius: 50% !important;
+}
+
+/* 更新栏 */
+.update-bar {
+  text-align: center;
+  font-size: 20rpx;
+  color: #aaa;
+  padding: 8rpx 0;
+  background: #fff;
+}
+
+/* 底部信息栏 */
+.footer-bar {
+  text-align: center;
+  font-size: 20rpx;
+  color: #bbb;
+  padding: 8rpx 0;
+  background: #fff;
+}
+
+/* 左侧选择栏 */
+.side-bar {
+  width: 160rpx;
+  background: #E8EAF6;
+  display: flex;
+  flex-direction: column;
+}
+
+.side-item {
+  padding: 24rpx 16rpx;
+  text-align: center;
+  font-size: 26rpx;
+  color: #666;
+  border-bottom: 1rpx solid #D1D5E8;
+}
+
+.side-item.active {
+  background: #5C6BC0;
+  color: white;
+  font-weight: bold;
+}
+
+/* 表格样式 */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 24rpx;
+}
+
+.data-table th,
+.data-table td {
+  border: 1rpx solid #ddd;
+  padding: 12rpx 8rpx;
+  text-align: center;
+}
+
+.data-table th {
+  background: #E3F2FD;
+  font-weight: bold;
+  color: #333;
+}
+
+.data-table tr:nth-child(even) {
+  background: #fafafa;
+}
+
+/* Tab切换 */
+.tab-bar {
+  display: flex;
+  background: #fff;
+  border-bottom: 1rpx solid #eee;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  font-size: 26rpx;
+  color: #666;
+}
+
+.tab-item.active {
+  color: white;
+  background: #1565C0;
+  font-weight: bold;
+}
+
+/* 分页 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16rpx 0;
+  gap: 16rpx;
+  background: #fff;
+}
+
+.page-btn {
+  padding: 8rpx 24rpx;
+  font-size: 24rpx;
+  background: #E3F2FD;
+  border-radius: 8rpx;
+  color: #1565C0;
+}
+
+.page-btn.disabled {
+  color: #ccc;
+  background: #f5f5f5;
+}
+
+.page-info {
+  font-size: 24rpx;
+  color: #666;
+}
+
+/* ===== 加载/错误状态（全局通用）===== */
+.loading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 200rpx;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 6rpx solid #e0e0e0;
+  border-top: 6rpx solid #1565C0;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 24rpx;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.error-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 200rpx;
+}
+
+.error-icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.error-text {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.error-hint {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 30rpx;
+}
+
+.retry-btn {
+  padding: 16rpx 60rpx;
+  background: linear-gradient(135deg, #42A5F5, #1565C0);
+  color: white;
+  font-size: 28rpx;
+  border-radius: 40rpx;
+  font-weight: bold;
+}

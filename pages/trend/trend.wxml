@@ -1,0 +1,90 @@
+<!--pages/trend/trend.wxml-->
+<view class="t">
+  <!-- 网格 -->
+  <block wx:if="{{viewMode==='grid'}}">
+    <view class="grid">
+      <view class="gi" wx:for="{{trendList}}" wx:key="code" bindtap="onTap" data-code="{{item.code}}">
+        <image class="gi-img" src="{{item.img}}" mode="aspectFill"></image>
+        <text class="gi-name">{{item.name}}</text>
+      </view>
+    </view>
+    <view class="acts">
+      <button class="act" bindtap="randomPick" data-type="welfare">福彩机选</button>
+      <button class="act" bindtap="randomPick" data-type="sports">体彩机选</button>
+      <button class="act" bindtap="showUniversal">万能码</button>
+    </view>
+  </block>
+
+  <!-- 走势图 -->
+  <block wx:else>
+    <view class="nav"><button class="nav-btn" bindtap="back">‹ 返回</button><text class="nav-t">{{title}}</text></view>
+
+    <!-- 加载中 -->
+    <view wx:if="{{loading}}" class="loading-wrap">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">正在加载走势数据...</text>
+    </view>
+
+    <!-- 加载失败 -->
+    <view wx:elif="{{loadError}}" class="error-wrap">
+      <text class="error-icon">📡</text>
+      <text class="error-text">数据加载失败</text>
+      <view class="retry-btn" bindtap="retry">重新加载</view>
+    </view>
+
+    <!-- 走势表格 -->
+    <scroll-view wx:else class="sv" scroll-x enhanced show-scrollbar>
+      <view class="tbl">
+        <!-- 表头 -->
+        <view class="tr th">
+          <view wx:for="{{cols}}" wx:key="index" class="td" style="width:{{item.w}}rpx;min-width:{{item.w}}rpx">
+            <text wx:if="{{item.cls==='s'}}" class="cs">{{item.text}}</text>
+            <text wx:else>{{item.text}}</text>
+          </view>
+        </view>
+
+        <!-- 数据 -->
+        <view class="tr" wx:for="{{rows}}" wx:key="index" wx:for-item="row">
+          <view wx:for="{{row}}" wx:key="index" wx:for-item="c" class="td" style="width:{{cols[index].w}}rpx;min-width:{{cols[index].w}}rpx">
+            <text wx:if="{{c.t==='h'}}" class="hr">{{c.v}}</text>
+            <text wx:elif="{{c.t==='he'}}" class="hb">{{c.v}}</text>
+            <text wx:elif="{{c.t==='m'}}">{{c.v}}</text>
+            <text wx:elif="{{c.t==='p'}}" class="tp">{{c.v}}</text>
+            <text wx:else>{{c.v}}</text>
+          </view>
+        </view>
+
+        <!-- 底部 -->
+        <view class="tr tf">
+          <view wx:for="{{foot1}}" wx:key="index" wx:for-item="c" class="td" style="width:{{cols[index].w}}rpx;min-width:{{cols[index].w}}rpx">
+            <text wx:if="{{c.t==='f'}}" class="tf-t">{{c.v}}</text>
+            <text wx:else>{{c.v}}</text>
+          </view>
+        </view>
+        <view class="tr tf">
+          <view wx:for="{{foot2}}" wx:key="index" wx:for-item="c" class="td" style="width:{{cols[index].w}}rpx;min-width:{{cols[index].w}}rpx">
+            <text wx:if="{{c.t==='f'}}" class="tf-t">{{c.v}}</text>
+            <text wx:else>{{c.v}}</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </block>
+
+  <!-- 弹窗 -->
+  <view class="mask" wx:if="{{showPick}}" bindtap="hidePick"></view>
+  <view class="pop" wx:if="{{showPick}}">
+    <view class="pop-h">{{pickTitle}}</view>
+    <view class="pop-b"><view wx:for="{{pickNums}}" wx:key="index" class="ball {{pickCls}}">{{item}}</view></view>
+    <view class="pop-f"><button class="pb p" bindtap="againPick">再选一注</button><button class="pb" bindtap="hidePick">关闭</button></view>
+  </view>
+
+  <view class="mask" wx:if="{{showUniversal}}" bindtap="hideUniversal"></view>
+  <view class="pop ps" wx:if="{{showUniversal}}">
+    <view class="pop-h">万能码推荐</view>
+    <view class="ul"><view wx:for="{{universalCodes}}" wx:key="name" class="ui" bindtap="useCode" data-code="{{item}}"><text class="un">{{item.name}}</text><text class="uv">{{item.nums}}</text></view></view>
+    <view class="pop-f"><button class="pb" bindtap="hideUniversal">关闭</button></view>
+  </view>
+
+  <view class="h120"></view>
+</view>

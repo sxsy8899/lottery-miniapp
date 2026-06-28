@@ -1,0 +1,91 @@
+<!--pages/bettable/bettable.wxml-->
+<view class="bet-container">
+  <view class="bet-guide">📋 选择彩票类型和投注方式，输入号码个数即可自动计算注数和金额。</view>
+  <!-- 彩票选择 -->
+  <view class="lottery-tabs">
+    <view
+      wx:for="{{lotteryTabs}}"
+      wx:key="code"
+      class="l-tab {{currentLottery === item.code ? 'active' : ''}}"
+      bindtap="switchLottery"
+      data-code="{{item.code}}"
+    >{{item.name}}</view>
+  </view>
+
+  <!-- 投注方式选择 -->
+  <view class="bet-type-section">
+    <text class="section-label">投注方式：</text>
+    <view class="type-tags">
+      <view
+        wx:for="{{betTypes[currentLottery]}}"
+        wx:key="*this"
+        class="type-tag {{currentBetType === item ? 'active' : ''}}"
+        bindtap="switchBetType"
+        data-type="{{item}}"
+      >{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 注数/金额计算器 -->
+  <view class="calc-area">
+    <view class="calc-row" wx:if="{{needInput}}">
+      <text class="calc-label">选号数量：</text>
+      <input class="calc-input" type="number" value="{{inputCount}}" bindinput="onInputCount" placeholder="输入选号数" />
+      <text class="calc-unit">个</text>
+    </view>
+    <view class="calc-row">
+      <text class="calc-label">单注金额：</text>
+      <picker mode="selector" range="{{priceOptions}}" value="{{priceIndex}}" bindchange="onPriceChange" class="calc-picker">
+        <view class="picker-text">{{priceOptions[priceIndex]}}元</view>
+      </picker>
+    </view>
+    <view class="calc-row">
+      <text class="calc-label">倍数：</text>
+      <input class="calc-input short" type="number" value="{{multiplier}}" bindinput="onMultiplierInput" placeholder="1" />
+      <text class="calc-unit">倍</text>
+    </view>
+  </view>
+
+  <!-- 结果展示 -->
+  <view class="result-card">
+    <view class="result-row">
+      <text class="result-label">注　数：</text>
+      <text class="result-value highlight">{{totalBets}}</text> 注
+    </view>
+    <view class="result-row">
+      <text class="result-label">总金额：</text>
+      <text class="result-value money">{{totalAmount}}</text> 元
+    </view>
+  </view>
+
+  <!-- 投注对照表 -->
+  <view class="table-title">投注注数与金额对照表（{{currentBetTypeName}}）</view>
+  <scroll-view class="ref-table-scroll" scroll-x="true">
+    <view class="ref-table">
+      <view class="ref-header">
+        <view class="ref-th">选号数</view>
+        <view class="ref-th">注数</view>
+        <view class="ref-th">金额(元)</view>
+      </view>
+      <view class="ref-row" wx:for="{{referenceTable}}" wx:key="count">
+        <view class="ref-td">{{item.count}}个</view>
+        <view class="ref-td">{{item.bets}}注</view>
+        <view class="ref-td price">{{item.amount}}元</view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 常见复式参考 -->
+  <view class="tips-card" wx:if="{{tips.length > 0}}">
+    <view class="tips-title">💡 投注提示</view>
+    <view class="tip-item" wx:for="{{tips}}" wx:key="*this">{{item}}</view>
+  </view>
+
+  <!-- 复制 -->
+  <view class="copy-bar" wx:if="{{totalBets > 0}}">
+    <button class="copy-btn" bindtap="copyTable">📋 复制投注对照表</button>
+  </view>
+
+  <!-- 底部占位 -->
+  <view style="height:120rpx;"></view>
+</view>
