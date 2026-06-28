@@ -242,12 +242,20 @@ def main():
             all_data[code] = result
         time.sleep(1)
 
-    print(f'\n--- 推送到服务器 ---')
-    success = push_to_server(all_data)
+    # 保存数据到本地文件（GitHub Actions 会提交此文件到仓库）
+    data_file = os.path.join(os.path.dirname(__file__), 'data', 'lottery-data.json')
+    os.makedirs(os.path.dirname(data_file), exist_ok=True)
+    with open(data_file, 'w', encoding='utf-8') as f:
+        json.dump(all_data, f, ensure_ascii=False)
+    print(f'\n数据已保存到本地: {data_file}')
+
+    # 尝试推送到服务器（可能失败，不影响本地保存）
+    print(f'\n--- 尝试推送到服务器 ---')
+    push_to_server(all_data)
 
     print(f'\n=== 同步完成 ===')
     print(f'时间: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
-    return 0 if success else 1
+    return 0
 
 
 if __name__ == '__main__':
