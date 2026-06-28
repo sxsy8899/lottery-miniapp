@@ -46,14 +46,15 @@ def new_session():
 def fetch_huiniao(code, full=False):
     """从 huiniao.top 获取彩票数据
     full=True: 翻页获取全部历史（首次使用）
-    full=False: 只取最新200期（后续增量更新）
+    full=False: 只取最新5期（后续增量更新，服务器自动去重）
     """
     huiniao_type = HUINIAO_TYPES.get(code)
     if not huiniao_type:
         return []
 
     s = new_session()
-    url = f'{API_BASE}?type={huiniao_type}&page=1&limit=200'
+    limit = 200 if full else 5
+    url = f'{API_BASE}?type={huiniao_type}&page=1&limit={limit}'
 
     try:
         resp = s.get(url, timeout=15)
@@ -83,7 +84,7 @@ def fetch_huiniao(code, full=False):
                 if page % 5 == 0:
                     print(f'  [{code}] 全量拉取 {page}/{total_pages}...')
         else:
-            print(f'  [{code}] 增量拉取（最新200期）')
+            print(f'  [{code}] 增量更新（最新5期）')
                 print(f'  [{code}] 翻页 {page}/{total_pages}...')
 
         last = result.get('last', {})
