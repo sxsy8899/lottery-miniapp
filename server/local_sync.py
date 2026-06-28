@@ -85,7 +85,6 @@ def fetch_huiniao(code, full=False):
                     print(f'  [{code}] 全量拉取 {page}/{total_pages}...')
         else:
             print(f'  [{code}] 增量更新（最新5期）')
-                print(f'  [{code}] 翻页 {page}/{total_pages}...')
 
         last = result.get('last', {})
         if not items and last:
@@ -100,9 +99,12 @@ def fetch_huiniao(code, full=False):
             if not entry['period']:
                 continue
 
-            # 提取号码（huiniao 返回 one~seven 字段）
+            # 提取号码（huiniao 返回 one~twenty 字段，快乐8有20个）
             nums = []
-            for k in ['one', 'two', 'three', 'four', 'five', 'six', 'seven']:
+            all_fields = ['one', 'two', 'three', 'four', 'five', 'six', 'seven',
+                          'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen',
+                          'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty']
+            for k in all_fields:
                 v = item.get(k)
                 if v is not None and str(v).isdigit():
                     nums.append(int(v))
