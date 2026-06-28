@@ -5,7 +5,7 @@ on:
     # 北京时间 21:35 = UTC 13:35 · 22:00 = UTC 14:00
     - cron: '35 13 * * *'
     - cron: '0 14 * * *'
-  workflow_dispatch:  # 支持手动触发
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -21,9 +21,15 @@ jobs:
       - name: 安装依赖
         run: pip install requests
 
-      - name: 同步数据到服务器
-        env:
-          LOTTERY_IMPORT_TOKEN: ${{ secrets.LOTTERY_IMPORT_TOKEN }}
+      - name: 拉取并保存数据
         run: |
           cd server
-          python local_sync.py https://www.592302.eu.cc
+          python local_sync.py
+
+      - name: 提交更新回仓库
+        run: |
+          git config user.name "lottery-sync-bot"
+          git config user.email "bot@sxsy8899.github.com"
+          git add server/data/lottery-data.json
+          git diff --cached --quiet || git commit -m "自动同步彩票数据 $(date '+%Y-%m-%d %H:%M')"
+          git push
