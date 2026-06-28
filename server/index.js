@@ -501,6 +501,37 @@ app.post('/api/lottery/import', (req, res) => {
   res.json({ success: true, totalAdded, results })
 })
 
+// 清空某个彩种的旧数据（用于重新全量同步）
+// POST /api/lottery/clear  { token: 'xxx', codes: ['qlc','klb'] }
+app.post('/api/lottery/clear', (req, res) => {
+  const IMPORT_TOKEN = process.env.LOTTERY_IMPORT_TOKEN || 'lottery2026'
+  const token = req.body?.token
+  const codes = req.body?.codes
+
+  if (token !== IMPORT_TOKEN) {
+    return res.json({ success: false, error: '认证失败' })
+  }
+  if (!Array.isArray(codes) || codes.length === 0) {
+    return res.json({ success: false, error: 'codes 必须是非空数组' })
+  }
+
+  const results = []
+  for (const code of codes) {
+    if (LOTTERY_DATA[code]) {
+      const oldLen = LOTTERY_DATA[code].length
+      LOTTERY_DATA[code] = []
+      clearCacheForCode(code)
+      results.push({ code, cleared: oldLen })
+      console.log(`[CLEAR:${code}] 已清空 ${oldLen} 期数据`)
+    } else {
+      results.push({ code, cleared: 0, note: '该彩种原本无数据' })
+    }
+  }
+
+  saveData()
+  res.json({ success: true, results })
+})
+
 // 健康检查
 app.get('/health', (req, res) => {
   const summary = {}
