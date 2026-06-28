@@ -177,7 +177,7 @@ def push_to_server(all_data):
         print(f'推送错误: {e}')
         return False
 
-def main():
+def main(full=False):
     print(f'=== 彩票数据同步 ===')
     print(f'时间: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
     print(f'数据源: huiniao.top')
@@ -213,4 +213,9 @@ def main():
     return 0
 
 if __name__ == '__main__':
-    sys.exit(main())
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--full', action='store_true', help='全量拉取所有历史数据')
+    args = parser.parse_args()
+
+    sys.exit(main(full=args.full))
